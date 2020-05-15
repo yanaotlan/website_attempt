@@ -1,15 +1,12 @@
 ---
-title: "Paper Title Number 1"
-collection: publications
-permalink: /publication/2009-10-01-paper-title-number-1
-excerpt: 'This paper is about the number 1. The number 2 is left for future work.'
-date: 2009-10-01
-venue: 'Journal 1'
-paperurl: 'http://academicpages.github.io/files/paper1.pdf'
-citation: 'Your Name, You. (2009). &quot;Paper Title Number 1.&quot; <i>Journal 1</i>. 1(1).'
+title: "Public and Private Diplomacy Sentiment Plots"
+collection: projects
+permalink: /projects/sentiment_plots
+excerpt: 'Plotting the data extracted from diplomatic texts exchanged by the Soviet Union and the United States between 1955 and 1964'
+date: 2020-05-10
+venue: ''
+paperurl: 'http://yanaotlan.github.io/files/sentiment_plots.html'
+citation: ''
 ---
-This paper is about the number 1. The number 2 is left for future work.
+Plotting the data extracted from diplomatic texts exchanged by the Soviet Union and the United Staes between 1955 and 1964. 
 
-[Download paper here](http://academicpages.github.io/files/paper1.pdf)
-
-Recommended citation: Your Name, You. (2009). "Paper Title Number 1." <i>Journal 1</i>. 1(1).
