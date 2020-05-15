@@ -1,0 +1,181 @@
+---
+title: "Diplomacy Plots"
+author: "Yana Otlan"
+date: "5/1/2020"
+output:
+  html_document:
+  toc: true
+self_contained: true
+github_document:
+  toc: true
+knit: (function(input_file, encoding) {
+  out_dir <- 'docs';
+  rmarkdown::render(input_file,
+                    encoding=encoding,
+                    output_file=file.path(dirname(input_file), out_dir, 'index.html'))})
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Diplomatic Sentiment Plots
+
+## USA
+
+Plot using all the data, inlcuding the UNSC records. Red and blue shaded areas are US-USSR MIDs that occurred between 1955 and 1964. All plots made with "Threatening" + "Angry" sentiment measure (higher score = more hawkish)
+
+
+
+
+```{r, echo = F, message = F, warning = F, fig.fullwidth = T}
+
+library(tidyverse)
+library(plotly)
+
+us_full = read_csv("us_full.csv")
+mids_table = read_csv("mids_table.csv")
+
+us_plot = ggplot() +
+  geom_smooth(data=us_full, aes(x = date, y = avg_threat, color = public), span = 0.10, se = F) +
+  #geom_line(data=us_full, aes(x = date, y = avg_threat, color = public)) +
+  geom_hline(yintercept = 0, color = "black", size = 0.3) +
+  scale_fill_manual(values=c("USA" = "blue", "USSR" = "red")) +
+  geom_rect(data = mids_table, 
+            aes(NULL,NULL,xmin = stdate, xmax = enddate, ymin = 0, ymax = 0.07,
+                fill = initiator,
+                text = paste("Outcome: ", outcome, 
+                             "<br>Hostility by Initiator: ", source_host,
+                             "<br>Hostility by Target:", target_host)), 
+            colour=NA,  alpha = 0.1) + 
+  labs(title = "Weekly Sentiment of Diplomatic Statements \nby the United States (with UNSC)",
+     subtitle = "Measure:Threatening + Angry (higher score = more hawkish)",
+     x = "Year-Month", 
+     y = "Hawkish Rhetoric", 
+     color = " ") +
+  scale_color_manual(labels = c("Private", "Public"), 
+                     values = c("lightblue", "darkblue")) +
+  scale_fill_manual(' ',
+                      values = c("blue", "red")) +
+  scale_x_date(date_labels = "%Y", 
+               date_breaks = "1 year") +
+  #scale_x_datetime(breaks=unique(year(date)),
+               #labels = date_format("%Y")) + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 12),
+        axis.text.y = element_text(size  = 12),
+        axis.title=element_text(size=14,face="bold"),
+        panel.background = element_rect(fill = "white",
+                                        colour = "white",
+                                        size = 0.25, linetype = "solid"),
+        panel.grid.major = element_line(size = 0.25, linetype = 'solid',
+                                        colour = "lightgrey"), 
+        panel.grid.minor = element_line(size = 0.25, linetype = 'solid',
+                                        colour = "lightgrey"),
+        axis.line = element_line(colour = "black"))
+
+ggplotly(us_plot)
+
+```
+
+Plot without UNSC records. Only made for the U.S. because I don't have records of Soviet statements yet. 
+
+
+
+
+```{r, echo = F, message = F, warning = F}
+us_noun = read_csv("us_noun.csv")
+
+usa_noun_plot = ggplot() +
+  geom_smooth(data=us_noun, aes(x = date, y = avg_threat, color = public), span = 0.10, se = F) +
+  #geom_line(data=us_full, aes(x = date, y = avg_threat, color = public)) +
+  geom_hline(yintercept = 0, color = "black", size = 0.3) +
+  scale_fill_manual(values=c("USA" = "blue", "USSR" = "red")) +
+  geom_rect(data = mids_table, 
+            aes(NULL,NULL,xmin = stdate, xmax = enddate, ymin = 0, ymax = 0.07,
+                fill = initiator,
+                text = paste("Outcome: ", outcome, 
+                             "<br>Hostility by Initiator: ", source_host,
+                             "<br>Hostility by Target:", target_host)), 
+            colour=NA,  alpha = 0.1) + 
+  labs(title = "Weekly Sentiment of Diplomatic Statements \nby the United States (no UNSC)",
+     subtitle = "Measure:Threatening + Angry (higher score = more hawkish)",
+     x = "Year-Month", 
+     y = "Hawkish Rhetoric", 
+     color = " ") +
+  scale_color_manual(labels = c("Private", "Public"), 
+                     values = c("lightblue", "darkblue")) +
+  scale_fill_manual(' ',
+                      values = c("blue", "red")) +
+  scale_x_date(date_labels = "%Y", 
+               date_breaks = "1 year") +
+  #scale_x_datetime(breaks=unique(year(date)),
+               #labels = date_format("%Y")) + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 12),
+        axis.text.y = element_text(size  = 12),
+        axis.title=element_text(size=14,face="bold"),
+        panel.background = element_rect(fill = "white",
+                                        colour = "white",
+                                        size = 0.25, linetype = "solid"),
+        panel.grid.major = element_line(size = 0.25, linetype = 'solid',
+                                        colour = "lightgrey"), 
+        panel.grid.minor = element_line(size = 0.25, linetype = 'solid',
+                                        colour = "lightgrey"),
+        axis.line = element_line(colour = "black"))
+
+
+ggplotly(usa_noun_plot)
+
+```
+
+
+## USSR 
+
+Plots for the Soviet Union
+
+
+
+```{r, echo = F, message = F, warning = F}
+ussr_full = read_csv("ussr_full.csv")
+
+ussr_plot = ggplot() +
+  geom_smooth(data=ussr_full, aes(x = date, y = avg_threat, color = public), span = 0.1, se=F) +
+  #geom_line(data=us_full, aes(x = date, y = avg_threat, color = public)) +
+  geom_hline(yintercept = 0, color = "black", size = 0.3) +
+  #scale_fill_manual(values=c("USA" = "blue", "USSR" = "red")) +
+  geom_rect(data = mids_table, 
+            aes(NULL,NULL,xmin = stdate, xmax = enddate, ymin = 0, ymax = 0.1,
+                fill = initiator,
+                text = paste("Outcome: ", outcome, 
+                             "<br>Hostility by Initiator: ", source_host,
+                             "<br>Hostility by Target:", target_host)), 
+            colour=NA,  alpha = 0.1) + 
+  labs(title = "Weekly Sentiment of Diplomatic Statements \nby the USSR (with UNSC)",
+     subtitle = "Measure:Threatening + Angry (higher score = more hawkish)",
+     x = "Year-Month", 
+     y = "Hawkish Rhetoric", 
+     color = " ") +
+  scale_color_manual(labels = c("Private", "Public"), 
+                     values = c("lightblue", "darkblue")) +
+  scale_fill_manual(' ',
+                      values = c("blue", "red")) +
+  scale_x_date(date_labels = "%Y", 
+               date_breaks = "1 year") +
+  #scale_x_datetime(breaks=unique(year(date)),
+               #labels = date_format("%Y")) + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 12),
+        axis.text.y = element_text(size  = 12),
+        axis.title=element_text(size=14,face="bold"),
+        panel.background = element_rect(fill = "white",
+                                        colour = "white",
+                                        size = 0.25, linetype = "solid"),
+        panel.grid.major = element_line(size = 0.25, linetype = 'solid',
+                                        colour = "lightgrey"), 
+        panel.grid.minor = element_line(size = 0.25, linetype = 'solid',
+                                        colour = "lightgrey"),
+        axis.line = element_line(colour = "black"))
+
+
+
+ggplotly(ussr_plot)
+```
